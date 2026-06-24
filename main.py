@@ -2,7 +2,19 @@
 Main Application for Bank Nifty High-Frequency Scalping Bot.
 Orchestrates all components with async event-driven architecture.
 """
+import threading
+import signal
 
+def setup_signal_handlers(bot):
+    if threading.current_thread() is not threading.main_thread():
+        return
+
+    def signal_handler(signum, frame):
+        bot.stop()
+
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler) 
+    
 import asyncio
 import signal
 import sys
